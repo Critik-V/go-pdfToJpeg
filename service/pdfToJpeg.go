@@ -9,20 +9,24 @@ import (
 	"github.com/gen2brain/go-fitz"
 )
 
-const jpegQuality int = 15  // Quality of the JPEG image
-const dir string = "images" // Directory to save images
-const ext string = ".jpg"   // Extension of the image
+const jpegQuality int = 10   // Quality of the JPEG image
+const imgExt string = ".jpg" // Extension of
+const docExt string = ".pdf" // Extension of the document
 
 func PdfToJpeg(fileName string) {
-	doc, err := fitz.New("pdf/test.pdf")
+
+	var pdfDir string = os.Getenv("PDF_STORAGE_PATH")   // Path to the directory where the PDFs are stored
+	var imgDir string = os.Getenv("IMAGE_STORAGE_PATH") // Path to the directory where the images will be stored
+
+	doc, err := fitz.New(fmt.Sprintf("%v/%v%v", pdfDir, fileName, docExt))
 	if err != nil {
 		panic(err)
 	}
 
 	defer doc.Close()
 
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		err = os.Mkdir(dir, os.ModePerm)
+	if _, err := os.Stat(imgDir); os.IsNotExist(err) {
+		err = os.Mkdir(imgDir, os.ModePerm)
 		if err != nil {
 			panic(err)
 		}
@@ -32,7 +36,7 @@ func PdfToJpeg(fileName string) {
 			panic(err)
 		}
 
-		f, err := os.Create(filepath.Join(dir, fmt.Sprintf("%v%v", fileName, ext)))
+		f, err := os.Create(filepath.Join(imgDir, fmt.Sprintf("%v%v", fileName, imgExt)))
 		if err != nil {
 			panic(err)
 		}
