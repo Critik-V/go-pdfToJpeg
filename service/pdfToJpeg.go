@@ -9,9 +9,28 @@ import (
 	"github.com/gen2brain/go-fitz"
 )
 
-const jpegQuality int = 10   // Quality of the JPEG image
+const jpegQuality int = 7    // Quality of the JPEG image
 const imgExt string = ".jpg" // Extension of
 const docExt string = ".pdf" // Extension of the document
+
+func convert(doc *fitz.Document, imgDir string, fileName string) {
+	img, err := doc.Image(0)
+	if err != nil {
+		panic(err)
+	}
+
+	f, err := os.Create(filepath.Join(imgDir, fmt.Sprintf("%v%v", fileName, imgExt)))
+	if err != nil {
+		panic(err)
+	}
+
+	err = jpeg.Encode(f, img, &jpeg.Options{Quality: int(jpegQuality)})
+	if err != nil {
+		panic(err)
+	}
+
+	f.Close()
+}
 
 func PdfToJpeg(fileName string) {
 
@@ -26,28 +45,14 @@ func PdfToJpeg(fileName string) {
 	defer doc.Close()
 
 	if _, err := os.Stat(imgDir); os.IsNotExist(err) {
+		// img directory does not exist
 		err = os.Mkdir(imgDir, os.ModePerm)
 		if err != nil {
 			panic(err)
 		}
-
-		img, err := doc.Image(0)
-		if err != nil {
-			panic(err)
-		}
-
-		f, err := os.Create(filepath.Join(imgDir, fmt.Sprintf("%v%v", fileName, imgExt)))
-		if err != nil {
-			panic(err)
-		}
-
-		err = jpeg.Encode(f, img, &jpeg.Options{Quality: int(jpegQuality)})
-		if err != nil {
-			panic(err)
-		}
-
-		f.Close()
+		convert(doc, imgDir, fileName)
 	} else {
-		fmt.Println("Directory already exists")
+		// img directory already exists
+		convert(doc, imgDir, fileName)
 	}
 }

@@ -29,3 +29,5 @@ func main() {
 	// Run server
 	server.Run(serverPort)
 }
+
+// curl -X POST http://localhost:5001/convert -d '{"fileName": "test"}' -H "Content-Type: application/json"

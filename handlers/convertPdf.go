@@ -8,7 +8,7 @@ import (
 )
 
 type body struct {
-	FileName string `json:"fileName"`
+	FileName string `json:"filename"`
 }
 
 func ConvertPdf(ctx *gin.Context) {
@@ -18,6 +18,13 @@ func ConvertPdf(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
 	}
-	service.PdfToJpeg(body.FileName)
+	done := make(chan bool)
+
+	go func() {
+		service.PdfToJpeg(body.FileName)
+		done <- true
+	}()
+
+	<-done
 	ctx.JSON(http.StatusOK, gin.H{"message": "Conversion successful"})
 }
