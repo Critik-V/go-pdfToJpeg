@@ -21,7 +21,11 @@ func ConvertPdf(ctx *gin.Context) {
 	done := make(chan bool)
 
 	go func() {
-		service.PdfToJpeg(body.FileName)
+		err := service.PdfToJpeg(body.FileName)
+		if err != nil {
+			ctx.AbortWithError(http.StatusBadRequest, err)
+			done <- true
+		}
 		done <- true
 	}()
 
