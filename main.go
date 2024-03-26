@@ -1,8 +1,8 @@
 package main
 
 import (
+	"go-pdf2jpeg/config"
 	"go-pdf2jpeg/handlers"
-	"go-pdf2jpeg/utils"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -21,7 +21,7 @@ func main() {
 	server := gin.Default()
 
 	// Middleware
-	server.Use(utils.CorsConfig)
+	server.Use(config.CorsConfig)
 
 	// Routes
 	server.POST("/convert", handlers.ConvertPdf)
@@ -29,5 +29,3 @@ func main() {
 	// Run server
 	server.Run(serverPort)
 }
-
-// curl -X POST http://localhost:5001/convert -d '{"fileName": "test"}' -H "Content-Type: application/json"
