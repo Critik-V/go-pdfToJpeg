@@ -4,6 +4,7 @@ import (
 	"go-pdf2jpeg/config"
 	"go-pdf2jpeg/handlers"
 	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -18,6 +19,9 @@ func main() {
 		log.Fatalf("Error loading .env file: %s", err)
 	}
 
+	if os.Getenv("GIN_MODE") != "" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	server := gin.Default()
 
 	// Middleware
