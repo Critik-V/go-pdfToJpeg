@@ -36,8 +36,7 @@ func convert(doc *fitz.Document, imgDir string, fileName string) error {
 	if err != nil {
 		return errors.Join(ErrEncodingJpeg, err)
 	}
-
-	f.Close()
+	defer f.Close()
 	return nil
 }
 
@@ -63,5 +62,4 @@ func PdfToJpeg(fileName string) error {
 	}
 	// img directory already exists
 	return convert(doc, imgDir, fileName)
-
 }
