@@ -17,7 +17,7 @@ var ErrEncodingJpeg = errors.New("error encoding jpeg image")
 var ErrPdfDirNotExist = errors.New("pdf directory does not exist")
 var ErrImgDirCreation = errors.New("image directory creation failed")
 
-const jpegQuality int = 7    // Quality of the JPEG image
+const jpegQuality int = 5    // Quality of the JPEG image
 const imgExt string = ".jpg" // Extension of
 const docExt string = ".pdf" // Extension of the document
 
