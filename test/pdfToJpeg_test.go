@@ -12,6 +12,7 @@ import (
 )
 
 const url string = "http://localhost:5001/convert"
+const multi int = 4
 
 func TestConvertPdfToJpeg(t *testing.T) {
 
@@ -28,7 +29,7 @@ func TestConvertPdfToJpeg(t *testing.T) {
 
 	t.Run("convert multiple pdf to jpeg", func(t *testing.T) {
 		var wg sync.WaitGroup
-		for i := 0; i < 4; i++ {
+		for i := 0; i < multi; i++ {
 			wg.Add(1)
 			go func() {
 				defer wg.Done()
@@ -54,13 +55,20 @@ func TestConvertPdfToJpeg(t *testing.T) {
 	})
 
 	t.Run("convert multiple inexistent pdf to jpeg", func(t *testing.T) {
-		for i := range 5 {
-			body := []byte(fmt.Sprintf(`{"filename": "%d.pdf"}`, i))
-			res, err := http.Post(url, "application/json", bytes.NewReader(body))
-			if err != nil {
-				t.Error(err)
-			}
-			require.Equal(t, http.StatusBadRequest, res.StatusCode)
+		var wg sync.WaitGroup
+		for i := 0; i < multi; i++ {
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+
+				body := []byte(fmt.Sprintf(`{"filename": "%d"}`, i))
+				res, err := http.Post(url, "application/json", bytes.NewReader(body))
+				if err != nil {
+					t.Error(err)
+				}
+				require.Equal(t, http.StatusBadRequest, res.StatusCode)
+			}()
 		}
+		wg.Wait()
 	})
 }
