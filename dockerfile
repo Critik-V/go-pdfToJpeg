@@ -12,8 +12,8 @@ COPY . .
 
 RUN apt-get update && apt-get install -y libmupdf-dev
 
-RUN go build -o main .
+RUN go build -o /main .
 
-EXPOSE 8080
+EXPOSE 5001
 
-CMD ["./main"]
+CMD ["/main"]
