@@ -1,6 +1,6 @@
-FROM golang:latest
+FROM golang:1.22 AS builder
 
-WORKDIR /app
+WORKDIR /builder
 
 COPY go.mod .
 
@@ -8,12 +8,20 @@ COPY go.sum .
 
 RUN go mod download
 
-COPY . .
-
 RUN apt-get update && apt-get install -y libmupdf-dev
+
+COPY . .
 
 RUN go build -o /main .
 
+FROM ubuntu:latest
+
 EXPOSE 5001
+
+WORKDIR /
+
+COPY --from=builder ./main .
+
+COPY .env .
 
 CMD ["/main"]
