@@ -30,7 +30,7 @@ func ConvertPdf(ctx *gin.Context) {
 		if err != nil {
 			ctx.AbortWithError(http.StatusBadRequest, errors.New("conversion failed"))
 		}
-		ctx.JSON(http.StatusCreated, gin.H{"message": "Conversion successful"})
+		ctx.JSON(http.StatusCreated, gin.H{"message": "Conversion successful", "status": "success"})
 		finished <- true
 	}()
 	<-finished

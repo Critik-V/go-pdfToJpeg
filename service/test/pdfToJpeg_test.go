@@ -1,4 +1,4 @@
-package test
+package service_test
 
 import (
 	"bytes"
@@ -8,11 +8,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 )
 
 const url string = "http://localhost:5001/convert"
-const multi int = 4
+const multi int = 5
 
 func TestConvertPdfToJpeg(t *testing.T) {
 
@@ -24,7 +24,7 @@ func TestConvertPdfToJpeg(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		require.Equal(t, http.StatusCreated, res.StatusCode)
+		assert.Equal(t, http.StatusCreated, res.StatusCode)
 	})
 
 	t.Run("convert multiple pdf to jpeg", func(t *testing.T) {
@@ -39,7 +39,7 @@ func TestConvertPdfToJpeg(t *testing.T) {
 				if err != nil {
 					t.Error(err)
 				}
-				require.Equal(t, http.StatusCreated, res.StatusCode)
+				assert.Equal(t, http.StatusCreated, res.StatusCode)
 			}()
 		}
 		wg.Wait()
@@ -51,7 +51,7 @@ func TestConvertPdfToJpeg(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		require.Equal(t, http.StatusBadRequest, res.StatusCode)
+		assert.Equal(t, http.StatusBadRequest, res.StatusCode)
 	})
 
 	t.Run("convert multiple inexistent pdf to jpeg", func(t *testing.T) {
@@ -66,7 +66,7 @@ func TestConvertPdfToJpeg(t *testing.T) {
 				if err != nil {
 					t.Error(err)
 				}
-				require.Equal(t, http.StatusBadRequest, res.StatusCode)
+				assert.Equal(t, http.StatusBadRequest, res.StatusCode)
 			}()
 		}
 		wg.Wait()
