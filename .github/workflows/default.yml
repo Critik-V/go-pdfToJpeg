@@ -18,7 +18,9 @@ jobs:
         run: go mod download
       - name: Run test
         shell: bash
-        run: go test ./...
+        run: |
+          IMAGE_STORAGE_PATH=images PDF_STORAGE_PATH=pdf go run main.go
+          go test ./...
 
   push:
     runs-on: ubuntu-latest
