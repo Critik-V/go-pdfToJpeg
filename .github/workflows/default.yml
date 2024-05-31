@@ -19,7 +19,10 @@ jobs:
       - name: Run test
         shell: bash
         run: |
-          IMAGE_STORAGE_PATH=images PDF_STORAGE_PATH=pdf go run main.go
+          touch .env
+          echo "IMAGE_STORAGE_PATH=images" >> .env
+          echo "PDF_STORAGE_PATH=pdf" >> .env
+          go run main.go
           go test ./...
 
   push:
