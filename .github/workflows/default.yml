@@ -16,14 +16,15 @@ jobs:
       - run: go version
       - name: Install dependencies
         run: go mod download
-      - name: Run test
+      - name: lunch server
         shell: bash
         run: |
           touch .env
           echo "IMAGE_STORAGE_PATH=images" >> .env
           echo "PDF_STORAGE_PATH=pdf" >> .env
           nohup go run main.go &
-          go test ./...
+      - name: Run tests
+        run: go test -v ./...
 
   push:
     runs-on: ubuntu-latest
