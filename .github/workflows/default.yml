@@ -22,7 +22,7 @@ jobs:
           touch .env
           echo "IMAGE_STORAGE_PATH=images" >> .env
           echo "PDF_STORAGE_PATH=pdf" >> .env
-          nohup go run main.go &
+          go run main.go
       - name: Run tests
         run: go test -v ./...
 
