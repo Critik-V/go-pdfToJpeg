@@ -22,7 +22,8 @@ jobs:
           touch .env
           echo "IMAGE_STORAGE_PATH=images" >> .env
           echo "PDF_STORAGE_PATH=pdf" >> .env
-          go run main.go & pid=$!; wait $pid; go test ./...
+          nohup go run main.go
+          go test ./...
 
   push:
     runs-on: ubuntu-latest
