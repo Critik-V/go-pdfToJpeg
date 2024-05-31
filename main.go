@@ -28,6 +28,9 @@ func main() {
 
 	// Middleware
 	var serverOrigin string = os.Getenv("SERVER_SERVICE_ORIGIN")
+	if serverOrigin == "" {
+		serverOrigin = "*"
+	}
 	server.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{serverOrigin},
 		AllowMethods:     []string{"POST"},
