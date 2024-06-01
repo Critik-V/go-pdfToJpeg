@@ -16,15 +16,18 @@ jobs:
       - run: go version
       - name: Install dependencies
         run: go mod download
-      - name: lunch server
+      - name: create .env file
         shell: bash
         run: |
           touch .env
           echo "IMAGE_STORAGE_PATH=images" >> .env
           echo "PDF_STORAGE_PATH=pdf" >> .env
-          go run main.go
+      - name: lunching the server
+        run: go run . &
       - name: Run tests
-        run: go test -v ./...
+        run: go test ./...
+      - name: kill the server
+        run: killall go
 
   push:
     runs-on: ubuntu-latest

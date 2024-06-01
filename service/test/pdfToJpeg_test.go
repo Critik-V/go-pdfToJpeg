@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
-	"os"
 	"sync"
 	"testing"
 
@@ -15,8 +14,6 @@ const url string = "http://localhost:5001/convert"
 const multi int = 5
 
 func TestConvertPdfToJpeg(t *testing.T) {
-
-	defer os.RemoveAll("../images")
 
 	t.Run("convert one pdf to jpeg", func(t *testing.T) {
 		body := []byte(`{"filename": "test"}`)
