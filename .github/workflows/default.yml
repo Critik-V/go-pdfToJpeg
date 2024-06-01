@@ -20,10 +20,13 @@ jobs:
         shell: bash
         run: |
           touch .env
+          echo "GIN_MODE=""" >> .env
           echo "IMAGE_STORAGE_PATH=images" >> .env
           echo "PDF_STORAGE_PATH=pdf" >> .env
       - name: lunching the server
         run: go run . &
+      - name: Wait for 10 seconds
+        run: sleep 10
       - name: Run tests
         run: go test ./...
       - name: kill the server
