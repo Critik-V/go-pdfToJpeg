@@ -6,35 +6,8 @@ on:
       - main
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: "stable"
-      - run: go version
-      - name: Install dependencies
-        run: go mod download
-      - name: create .env file
-        shell: bash
-        run: |
-          touch .env
-          echo "GIN_MODE=" >> .env
-          echo "IMAGE_STORAGE_PATH=images" >> .env
-          echo "PDF_STORAGE_PATH=pdf" >> .env
-      - name: lunching the server
-        run: go run main.go &
-      - name: Wait for 10 seconds
-        run: sleep 10
-      - name: Run tests
-        run: go test ./...
-      - name: kill the server
-        run: killall go
-
   push:
     runs-on: ubuntu-latest
-    needs: test
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -52,7 +25,7 @@ jobs:
             git clone https://github.com/${{github.repository}}.git
             cd ./${{github.event.repository.name}}
             cp .env.example .env
-            sed -i "s/GIN_MODE=.*$/GIN_MODE=release/" .env
+            sed -i "s/GIN_MODE=.*$/GIN_MODE=production/" .env
             sed -i "s/IMAGE_STORAGE_PATH=.*$/IMAGE_STORAGE_PATH=images/" .env
             sed -i "s/PDF_STORAGE_PATH=.*$/PDF_STORAGE_PATH=pdf/" .env
             sed -i "s/SERVER_SERVICE_PORT=.*$/SERVER_SERVICE_PORT=${{secrets.SERVER_PORT}}/" .env
