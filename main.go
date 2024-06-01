@@ -21,7 +21,7 @@ func init() {
 }
 
 func main() {
-	if os.Getenv("GIN_MODE") != "" {
+	if os.Getenv("GIN_MODE") == "production" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	server := gin.Default()
